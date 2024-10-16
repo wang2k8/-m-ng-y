@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Timer ❤️</title>
+    <style>
+        body {
+            font-family: 'Arial Black', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #2a0038, #4b0056, #8b006e); /* Nền đêm lãng mạn */
+            position: relative;
+            overflow: hidden;
+        }
+
+        #timer {
+            font-size: 30px;
+            text-align: center;
+            color: #ff69b4; /* Màu hồng tươi */
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5), 0 0 20px rgba(255, 105, 180, 0.3); /* Bóng chữ hồng sáng hơn nhưng nhẹ nhàng hơn */
+            animation: glowText 2s infinite alternate;
+        }
+
+        #timer p {
+            font-size: 35px;
+            margin-bottom: 15px;
+            color: #ff1493; /* Màu hồng đậm */
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5), 0 0 20px rgba(255, 105, 180, 0.3); /* Bóng hồng đậm sáng hơn nhưng nhẹ nhàng hơn */
+        }
+
+        #time-elapsed {
+            font-size: 24px;
+            color: #ff69b4;
+            display: inline-block;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Hiệu ứng thay đổi số giờ */
+        .animate-number {
+            animation: zoomIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes glowText {
+            0% {
+                text-shadow: 0 0 10px rgba(255, 105, 180, 0.5), 0 0 20px rgba(255, 105, 180, 0.3);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(255, 105, 180, 0.7), 0 0 40px rgba(255, 105, 180, 0.5);
+            }
+        }
+
+        @keyframes zoomIn {
+            0% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Hiệu ứng trái tim phát sáng bay từ dưới lên */
+        .heart {
+            position: absolute;
+            width: 20px; /* Kích thước trái tim */
+            height: 20px; /* Kích thước trái tim */
+            background-color: #ff69b4; /* Màu hồng tươi */
+            box-shadow: 0 0 20px rgba(255, 105, 180, 1); /* Hiệu ứng phát sáng */
+            transform: rotate(-45deg);
+            opacity: 0.9;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px; /* Kích thước phần trên của trái tim */
+            height: 20px; /* Kích thước phần trên của trái tim */
+            border-radius: 50%;
+            background-color: #ff69b4; /* Màu hồng tươi */
+            box-shadow: 0 0 20px rgba(255, 105, 180, 1); /* Hiệu ứng phát sáng */
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 10px;
+            top: 0;
+        }
+
+        /* Trái tim bay lên từ đáy màn hình và biến mất giữa chừng */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(-45deg); /* Bắt đầu từ dưới đáy */
+                opacity: 1; /* Trái tim hiện rõ */
+            }
+            50% {
+                opacity: 1; /* Trái tim vẫn rõ ràng */
+            }
+            100% {
+                transform: translateY(-50vh) rotate(-45deg); /* Kết thúc ở giữa */
+                opacity: 0; /* Trái tim biến mất */
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            #timer {
+                font-size: 28px;
+            }
+
+            #timer p {
+                font-size: 30px;
+            }
+
+            #time-elapsed {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 50px;
+            }
+
+            #timer {
+                font-size: 24px;
+            }
+
+            #timer p {
+                font-size: 28px;
+            }
+
+            #time-elapsed {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #timer {
+                font-size: 20px;
+            }
+
+            #timer p {
+                font-size: 24px;
+            }
+
+            #time-elapsed {
+                font-size: 18px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="timer">
+        <p>Xem nào, từ 18/4/2021 đến nay là...</p>
+        <span id="time-elapsed"></span>
+    </div>
+
+    <!-- Script tính thời gian và hiệu ứng trái tim -->
+    <script>
+        function calculateTimeElapsed() {
+            const startDate = new Date('2021-04-18');
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            return `${days} ngày, ${hours} giờ, ${minutes} phút, ${seconds} giây`;
+        }
+
+        function updateTimer() {
+            const timeElapsed = document.getElementById('time-elapsed');
+            const newTime = calculateTimeElapsed();
+            timeElapsed.innerHTML = '';
+
+            // Tách từng số và chữ để thêm hiệu ứng
+            for (let i = 0; i < newTime.length; i++) {
+                const span = document.createElement('span');
+                span.textContent = newTime[i];
+                span.classList.add('animate-number');
+                timeElapsed.appendChild(span);
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+
+        // Tạo trái tim liên tục từ phía dưới và tràn ngập phần đáy
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * window.innerWidth + 'px'; // Vị trí ngẫu nhiên theo chiều ngang
+            heart.style.top = window.innerHeight + 'px'; // Bắt đầu từ dưới đáy
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's'; // Thời gian bay ngẫu nhiên
+            heart.style.animationName = 'floatUp';
+            heart.style.animationFillMode = 'forwards'; // Giữ lại trạng thái cuối cùng
+
+            document.body.appendChild(heart);
+
+            // Xóa trái tim sau khi nó biến mất
+            setTimeout(() => {
+                heart.remove();
+            }, 7000); // Thời gian tồn tại của trái tim là 7 giây
+        }
+
+        // Tăng số lượng trái tim
+        setInterval(createHeart, 250); // Tạo trái tim mới mỗi 250ms để dày đặc hơn
+    </script>
+
+</body>
+</html>
