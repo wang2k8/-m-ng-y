@@ -15,6 +15,7 @@
             background: linear-gradient(135deg, #2a0038, #4b0056, #8b006e); /* Nền đêm lãng mạn */
             position: relative;
             overflow: hidden;
+            transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp khi nghiêng */
         }
 
         #timer {
@@ -23,6 +24,7 @@
             color: #ff69b4; /* Màu hồng tươi */
             text-shadow: 0 0 10px rgba(255, 105, 180, 0.5), 0 0 20px rgba(255, 105, 180, 0.3); /* Bóng chữ nhẹ nhàng */
             animation: glowText 2s infinite alternate;
+            transition: transform 0.3s ease; /* Hiệu ứng chuyển tiếp khi nghiêng */
         }
 
         #timer p {
@@ -184,6 +186,20 @@
                 heart.remove();
             });
         }
+
+        function handleMouseMove(event) {
+            const windowWidth = window.innerWidth;
+            const mouseX = event.clientX;
+
+            const tiltAmount = 30; // Độ nghiêng tối đa
+            const bodyTilt = (mouseX / windowWidth - 0.5) * 2 * tiltAmount; // Tính toán góc nghiêng
+
+            // Nghiêng toàn bộ body và timer
+            document.body.style.transform = `rotateY(${bodyTilt}deg)`;
+            document.getElementById('timer').style.transform = `rotateY(${bodyTilt}deg)`;
+        }
+
+        window.addEventListener('mousemove', handleMouseMove);
 
         setInterval(updateTimer, 1000);
         setInterval(createHeart, 500); // Giảm số lượng trái tim tạo ra
